@@ -100,7 +100,11 @@ export function GuiEditor(props: {
                 <div className="flex gap-1">
                   <div className="w-1/2">
                     <Label htmlFor={question.name + "-name-edit"}>Name</Label>
-                    <Input id={question.name + "edit"} value={question.name} />
+                    <Input
+                      id={question.name + "edit"}
+                      value={question.name}
+                      readOnly
+                    />
                   </div>
                   <div className="w-1/2">
                     <Label htmlFor={question.name + "-type-edit"}>Type</Label>

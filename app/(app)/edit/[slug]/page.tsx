@@ -2,30 +2,20 @@ import { db } from "@/lib/db";
 import { questionnaires } from "@/lib/db/schema/auth";
 import { eq } from "drizzle-orm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AppWindow, Code2, Save } from "lucide-react";
+import { AppWindow, Code2 } from "lucide-react";
 import { GuiEditor } from "./components/gui-editor";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Textarea } from "@/components/ui/textarea";
+import { editJson } from "./zustand";
+import { getUserAuth } from "@/lib/auth/utils";
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  const { session } = await getUserAuth();
   const currentquestionnaire = await db
     .select()
     .from(questionnaires)
     .where(eq(questionnaires.id, params.slug));
 
-  console.log(currentquestionnaire);
-
-  const questionnaire = {
-    json: currentquestionnaire[0].json,
-    id: currentquestionnaire[0].id,
-    name: currentquestionnaire[0].name,
-    userId: currentquestionnaire[0].userId,
-  };
+  const newtest: editJson[] = JSON.parse(JSON.stringify(currentquestionnaire));
 
   return (
     <div className="p-6 lg:p-12 w-full">
@@ -49,8 +39,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
           <TabsContent value="gui">
             <GuiEditor
-              json={currentquestionnaire[0].json}
+              json={newtest}
               questionnaire={currentquestionnaire[0]}
+              userId={session!.user.id || ""}
             />
           </TabsContent>
           <TabsContent value="code">
