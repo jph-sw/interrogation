@@ -1,3 +1,3 @@
 # Interrogation
 
-Interrogation is a Website to create forms. The answer are sent by using discord webhooks.
+Interrogation is a Website to create forms. The answers are sent by using discord webhooks.
