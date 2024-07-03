@@ -12,7 +12,6 @@ import { RenderJson } from "@/components/renderJson";
 import { toast } from "sonner";
 import { startTransition, useState } from "react";
 import { useRouter } from "next/navigation";
-import { v4 } from "uuid";
 import {
   Dialog,
   DialogContent,
@@ -42,7 +41,7 @@ export function Editor(props: { userId: string }) {
       const res = await fetch("/api/questionnaire", {
         method: "PUT",
         body: JSON.stringify({
-          id: v4(),
+          id: Math.random().toString(36),
           name: name,
           description: description,
           userId: props.userId,
