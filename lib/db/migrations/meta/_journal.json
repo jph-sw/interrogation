@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1719820716117,
+      "tag": "0000_fuzzy_celestials",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1719821502033,
+      "tag": "0001_high_morbius",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1719824829468,
+      "tag": "0002_whole_lake",
+      "breakpoints": true
+    }
+  ]
+}
