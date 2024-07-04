@@ -1,5 +1,6 @@
 import { getUserAuth } from "@/lib/auth/utils";
 import { Editor } from "./components/editor";
+import { editJson } from "../edit/[slug]/zustand";
 
 export default async function Page() {
   const { session } = await getUserAuth();
@@ -15,7 +16,7 @@ export interface Questionnaire {
   id: string;
   name: string;
   userId: string;
-  json: unknown;
+  json: editJson[];
 }
 
 export interface Question {

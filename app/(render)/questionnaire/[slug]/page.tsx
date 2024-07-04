@@ -1,4 +1,4 @@
-import { editJson } from "@/app/(app)/edit/[slug]/zustand";
+import { Questionnaire, editJson } from "@/app/(app)/edit/[slug]/zustand";
 import { RenderJson } from "@/components/renderJson";
 import { db } from "@/lib/db";
 import { questionnaires } from "@/lib/db/schema/auth";
@@ -10,11 +10,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
     .from(questionnaires)
     .where(eq(questionnaires.id, params.slug));
 
-  const newtest: editJson[] = JSON.parse(JSON.stringify(currentquestionnaire));
+  const newtest: Questionnaire[] = JSON.parse(
+    JSON.stringify(currentquestionnaire)
+  );
 
   return (
     <div>
-      <RenderJson json={newtest} />
+      <RenderJson questionnaire={newtest} />
     </div>
   );
 }

@@ -21,53 +21,47 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export function GuiEditor(props: {
-  json: editJson[];
-  userId: string;
-  questionnaire: Questionnaire;
-}) {
-  const json = useEditStore((state) => state.json);
+export function GuiEditor(props: { questionnaire: Questionnaire[] }) {
+  const Questionnaire = useEditStore((state) => state.questionnaire);
   const addPage = useEditStore((state) => state.addPage);
   const addQuestion = useEditStore((state) => state.addQuestion);
   const removePage = useEditStore((state) => state.removePage);
-  const setJson = useEditStore((state) => state.setJson);
+  const setQuestionnaire = useEditStore((state) => state.setQuestionnaire);
   const changeQuestionType = useEditStore((state) => state.changeQuestionType);
-  const changeQuestionName = useEditStore((state) => state.changeQuestionName);
   const changeQuestionTitle = useEditStore(
     (state) => state.changeQuestionTitle
   );
 
-  const router = useRouter();
-
   useEffect(() => {
-    setJson(json);
-  }, [props.json]);
+    setQuestionnaire(props.questionnaire);
+  }, []);
+
+  console.log("This is the current questionnaire", props.questionnaire);
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const target = event.target as HTMLFormElement;
-
     startTransition(async () => {
       const res = await fetch("/api/questionnaire/edit", {
         method: "PUT",
         body: JSON.stringify({
-          id: props.questionnaire.id,
-          name: props.questionnaire.name,
+          id: Questionnaire.id,
+          name: Questionnaire.name,
           description: "description",
-          userId: props.userId,
-          json: json,
+          userId: Questionnaire.userId,
+          json: Questionnaire.json,
         }),
         headers: { "Content-Type": "application/json" },
       });
       if (res.status === 200)
-        toast.success("Successfully updated" + props.questionnaire.name);
-      router.refresh();
+        toast.success("Successfully updated " + Questionnaire.name);
+      // router.refresh();
     });
   };
 
   return (
     <div className="w-full">
-      {json.map((page, pageIndex) => (
+      <h1>Editing {Questionnaire.name}</h1>
+      {Questionnaire.json.map((page, pageIndex) => (
         <div
           key={page.title + pageIndex}
           className="bg-muted p-4 rounded-lg lg:w-1/2 mb-2"
@@ -83,50 +77,51 @@ export function GuiEditor(props: {
             </button>
           </div>
           <div className="flex flex-col gap-y-2">
-            {page.content.map((question, questionIndex) => (
-              <div
-                key={question.name + questionIndex}
-                className="border-b py-2"
-              >
-                <Label htmlFor={question.name + "-title-edit"}>Title</Label>
-                <Input
-                  id={question.name + "-title-edit"}
-                  value={question.title}
-                  onChange={(e) =>
-                    changeQuestionTitle(question.name, e.target.value)
-                  }
-                  className="my-1"
-                />
-                <div className="flex gap-1">
-                  <div className="w-1/2">
-                    <Label htmlFor={question.name + "-name-edit"}>Name</Label>
-                    <Input
-                      id={question.name + "edit"}
-                      value={question.name}
-                      readOnly
-                    />
-                  </div>
-                  <div className="w-1/2">
-                    <Label htmlFor={question.name + "-type-edit"}>Type</Label>
-                    <Select
-                      defaultValue={question.type}
-                      onValueChange={(e) =>
-                        changeQuestionType(question.name, e)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="text">Text</SelectItem>
-                        <SelectItem value="number">Number</SelectItem>
-                        <SelectItem value="email">Email</SelectItem>
-                      </SelectContent>
-                    </Select>
+            {page.content &&
+              page.content.map((question, questionIndex) => (
+                <div
+                  key={question.name + questionIndex}
+                  className="border-b py-2"
+                >
+                  <Label htmlFor={question.name + "-title-edit"}>Title</Label>
+                  <Input
+                    id={question.name + "-title-edit"}
+                    value={question.title}
+                    onChange={(e) =>
+                      changeQuestionTitle(question.name, e.target.value)
+                    }
+                    className="my-1"
+                  />
+                  <div className="flex gap-1">
+                    <div className="w-1/2">
+                      <Label htmlFor={question.name + "-name-edit"}>Name</Label>
+                      <Input
+                        id={question.name + "edit"}
+                        value={question.name}
+                        readOnly
+                      />
+                    </div>
+                    <div className="w-1/2">
+                      <Label htmlFor={question.name + "-type-edit"}>Type</Label>
+                      <Select
+                        defaultValue={question.type}
+                        onValueChange={(e) =>
+                          changeQuestionType(question.name, e)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="text">Text</SelectItem>
+                          <SelectItem value="number">Number</SelectItem>
+                          <SelectItem value="email">Email</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
             <div className="py-2">
               <Button
                 className="w-full"

@@ -18,7 +18,7 @@ export async function PUT(request: Request) {
 
   await db
     .update(questionnaires)
-    .set({ json: body.json })
+    .set({ json: body.json, name: body.name, description: body.description })
     .where(eq(questionnaires.id, body.id));
 
   revalidatePath("/create");

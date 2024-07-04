@@ -7,6 +7,8 @@ import { GuiEditor } from "./components/gui-editor";
 import { Textarea } from "@/components/ui/textarea";
 import { editJson } from "./zustand";
 import { getUserAuth } from "@/lib/auth/utils";
+import { Questionnaire } from "../../create/page";
+import { QuestionnaireSettings } from "./components/delete-questionnaire-button";
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const { session } = await getUserAuth();
@@ -15,14 +17,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
     .from(questionnaires)
     .where(eq(questionnaires.id, params.slug));
 
-  const newtest: editJson[] = JSON.parse(JSON.stringify(currentquestionnaire));
+  const newtest: Questionnaire[] = JSON.parse(
+    JSON.stringify(currentquestionnaire)
+  );
 
   return (
     <div className="p-6 lg:p-12 w-full">
       <div className="flex flex-col gap-1 w-full">
-        <h1>
-          Editing <b>{currentquestionnaire[0].name}</b>
-        </h1>
         <Tabs defaultValue="gui">
           <div className="flex justify-between items-center w-full lg:w-1/2">
             <TabsList className="flex justify-between w-[96px]">
@@ -35,14 +36,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 </TabsTrigger>
               </div>
             </TabsList>
+            <QuestionnaireSettings />
           </div>
 
           <TabsContent value="gui">
-            <GuiEditor
-              json={newtest}
-              questionnaire={currentquestionnaire[0]}
-              userId={session!.user.id || ""}
-            />
+            <GuiEditor questionnaire={newtest} />
           </TabsContent>
           <TabsContent value="code">
             <Textarea
