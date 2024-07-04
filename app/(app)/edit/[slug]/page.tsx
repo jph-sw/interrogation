@@ -9,6 +9,26 @@ import { editJson } from "./zustand";
 import { getUserAuth } from "@/lib/auth/utils";
 import { Questionnaire } from "../../create/page";
 import { QuestionnaireSettings } from "./components/delete-questionnaire-button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Interrogation - Edit",
+  description: "Edit a questionnaire",
+  icons: {
+    icon: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/icon.svg",
+        href: "/icon.svg",
+      },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/icon.svg",
+        href: "/icon.svg",
+      },
+    ],
+  },
+};
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const { session } = await getUserAuth();
